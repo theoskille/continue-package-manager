@@ -14,9 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/semver": "^7.7.0",
     "commander": "^12.1.0",
     "ncp": "^2.0.0",
     "package-json-type": "^1.0.3",
+    "semver": "^7.7.1",
     "tar": "^7.1.0"
   },
   "devDependencies": {

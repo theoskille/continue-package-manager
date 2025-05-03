@@ -19,3 +19,13 @@ export async function getPackageInfo(dep: Dependency): Promise<any> {
   const data = await resp.json();
   return data;
 }
+
+export async function getPackageMetadata(name: string): Promise<any> {
+  try {
+    const res = await fetch(`https://registry.npmjs.org/${name}`);
+    const data = await res.json();
+    return data;
+  } catch(error) {
+    throw new Error(`Failed to fetch package info for ${name}: ${error}`);
+  }
+}
