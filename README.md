@@ -43,3 +43,16 @@ It did work though.
 
 Created an optimized version that looked to put the most commonly used version at root.
 
+- Added a metadata cache to reduce network calls on duplicate dependencies.
+- Broke process down into seperate functions. 
+- Create a dependencyGraph with just the info we need. use this instead of making network calls every time to traverse the tree.
+- calculate the "optimal version" based on which one satisfies the most ranges
+- Added unit tests to test a variety of situations
+- Added visualizer to log what the plan would look like to help testing
+
+# Attempt 5
+
+Added json-lock file for reproducible installs
+
+
+
