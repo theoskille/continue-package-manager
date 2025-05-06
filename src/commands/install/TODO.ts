@@ -2,7 +2,7 @@ import { InstallationPlan, DependencyInstallation } from "../../types";
 import { getPackageMetadata } from "../../util/registry";
 import semver from "semver";
 
-interface PackageMetadata {
+export interface PackageMetadata {
   versions: Record<string, {
     dependencies: Record<string, string>;
   }>;
