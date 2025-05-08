@@ -55,3 +55,49 @@ Created an optimized version that looked to put the most commonly used version a
 Added json-lock file for reproducible installs
 
 
+## Future considerations
+
+- Add support for peer dependencies (when a package requires it to be bundled with another dependency even though it is not a dependency of this actual module. ex: react and a react plugin) 
+- Add support for circular depenencies. In my current implemenation i think this would cause infinite recursion...
+- Adding paralel fetching could significantly speed up the process
+- More sophisticated version selection. Right now, I prefer the version that supports the most number of modules. but this might not be the best one. I would spend more time coming with a comprehensive strategy to handle version selection.
+
+
+
+
+## Trade offs
+
+Original deeply nested approach (no hoisting)
+pros
+- Deterministic
+- Garenteed optimal version
+- Simple
+cons
+- Duplication and significantly larger project size
+- Performance
+
+Flattened Tree with hoisting
+- Space effenciency.
+- Faster installation
+- Performance, aka faster module look-up time
+cons
+- more complex, harder to debug
+- Not deterministic. Different runs could produce different outcomes. (lock file helps with this though)
+
+# Other approach
+
+pnpm uses content-addressable storage with sym-links.
+
+In short, modules and all their version are stored in a store and references using symlinks.
+This way, each node_modules get's it's own depenedency tree, but the versions are only stored in one place and referenced via the symlink
+
+The key innovation of this approach is that it separates the concerns of:
+
+Package storage (deduplicated)
+Package resolution (strict and correct)
+
+This gives you the best of both worlds: the correctness of deep nesting with the efficiency of hoisting, plus additional benefits like cross-project deduplication.
+
+In the future, I would consider an approach like this.
+
+
