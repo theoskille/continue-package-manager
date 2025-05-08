@@ -59,11 +59,8 @@ Added json-lock file for reproducible installs
 
 - Add support for peer dependencies (when a package requires it to be bundled with another dependency even though it is not a dependency of this actual module. ex: react and a react plugin) 
 - Add support for circular depenencies. In my current implemenation i think this would cause infinite recursion...
-- Adding paralel fetching could significantly speed up the process
-- More sophisticated version selection. Right now, I prefer the version that supports the most number of modules. but this might not be the best one. I would spend more time coming with a comprehensive strategy to handle version selection.
-
-
-
+- Adding parallel fetching could significantly speed up the process
+- More sophisticated version selection. Right now, It prefer the version that supports the most number of modules. but this might not be the best one. I would spend more time coming with a comprehensive strategy to handle version selection.
 
 ## Trade offs
 
