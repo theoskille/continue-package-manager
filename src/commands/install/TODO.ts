@@ -46,10 +46,16 @@ export async function constructInstallationPlan(
 ): Promise<InstallationPlan> {
   // check if package-lock.json exists. if it does, build using lock file
   if(packageLockExists()) {
+    console.log("Found package-lock.json");
     const packageLock: PackageLock = readPackageLock();
-    return buildInstallationPlanFromLock(packageLock, topLevelDependencies);
+    const plan = buildInstallationPlanFromLock(packageLock, topLevelDependencies);
+    // an empty plan means invalid or incomplete lock file
+    if(plan.length > 0) {
+      console.log("Built Tree using package-lock.json");
+      return plan;
+    }
   }
-
+  console.log("Package-lock invalid or missing, building from scratch");
   // Cache for package metadata to avoid duplicate network calls
   const metadataCache = new Map<string, PackageMetadata>();
   
@@ -65,7 +71,7 @@ export async function constructInstallationPlan(
     versionRange: string,
     parentPackage?: string
   ): Promise<void> {
-    console.log(`Building graph node for ${name}@${versionRange}`);
+    // console.log(`Building graph node for ${name}@${versionRange}`);
     // Create or update package node
     if (!packageGraph.has(name)) {
       packageGraph.set(name, {
@@ -266,7 +272,6 @@ export async function constructInstallationPlan(
 
     // generate package-lock.json
     const packageLock: PackageLock = await generatePackageLock("my-project", "1.0.0",  plan, metadataCache, topLevelDependencies);
-    console.log(packageLock);
     writePackageLock(packageLock);
 
     return plan;
@@ -496,6 +501,7 @@ function buildInstallationPlanFromLock(
   packageLock: PackageLock,
   topLevelDependencies: Record<string, string>
 ): InstallationPlan {
+  console.log("Attempting to build from package-lock.json");
   const plan: InstallationPlan = [];
   
   // Check if the top-level dependencies match what's in package.json
@@ -517,14 +523,6 @@ function buildInstallationPlanFromLock(
       lockfileIsValid = false;
       break;
     }
-    
-    // Optionally: Check if the locked version satisfies the range
-    // This would require importing semver again
-    // if (!semver.satisfies(rootPackage.dependencies[name], versionRange)) {
-    //   console.warn(`Locked version ${rootPackage.dependencies[name]} for ${name} doesn't satisfy range ${versionRange}`);
-    //   lockfileIsValid = false;
-    //   break;
-    // }
   }
   
   if (!lockfileIsValid) {
