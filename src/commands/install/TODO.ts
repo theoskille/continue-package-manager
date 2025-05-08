@@ -52,7 +52,7 @@ export async function constructInstallationPlan(
     
     // Fetch metadata (from cache if possible)
     if (!metadataCache.has(name)) {
-      console.log('cache miss');
+      // console.log('cache miss');
       const metadata = await getPackageMetadata(name);
 
       // Only store the versions information we need
@@ -60,7 +60,7 @@ export async function constructInstallationPlan(
         versions: metadata.versions || {}
       });
     } else {
-      console.log('cache hit');
+      // console.log('cache hit');
     }
     
     const metadata = metadataCache.get(name)!;
@@ -175,8 +175,6 @@ export async function constructInstallationPlan(
         // Process dependencies
         const packageNode = packageGraph.get(name)!;
         for (const [depName, depVersionRanges] of packageNode.dependencies.entries()) {
-          // Just pick the first version range for simplicity
-          // In a more advanced implementation, you might want to be smarter here
           const depVersionRange = [...depVersionRanges][0];
           
           const newParentPath = isConflict || parentPath 
@@ -248,22 +246,6 @@ export async function constructInstallationPlan(
   }
 }
 
-// async function resolveVersion(name: string, versionRange: string): Promise<string> {
-//   // Get metadata for the package
-//   const metadata = await getPackageMetadata(name);
-  
-//   // Extract all available versions
-//   const availableVersions = Object.keys(metadata.versions || {});
-  
-//   // Find the highest version that satisfies the range
-//   const resolvedVersion = semver.maxSatisfying(availableVersions, versionRange);
-  
-//   if (!resolvedVersion) {
-//     throw new Error(`Cannot resolve version range ${versionRange} for package ${name}`);
-//   }
-  
-//   return resolvedVersion;
-// }
 
 function visualizeInstallationTree(installationPlan: InstallationPlan): string {
   let output = "Installation Tree Structure\n";
